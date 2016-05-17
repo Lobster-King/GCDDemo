@@ -11,6 +11,7 @@
 @interface SerialDispatchQueue ()
 {
     dispatch_queue_t _serialQueue;
+    BOOL _isCanceled;
 }
 @end
 
@@ -24,7 +25,12 @@
 }
 
 - (void)pushQueue:(taskBlock)task{
-    dispatch_async(_serialQueue, task);
+    //If you want to be able to cancel your running jobs, you'll need to do so in your own logic. GCD purposefully doesn't expose a true cancellation API.
+    dispatch_async(_serialQueue, ^{
+        while (!_isCanceled) {
+            task();
+        }
+    });
 }
 
 - (void)suspend{
@@ -33,6 +39,10 @@
 
 - (void)resume{
     dispatch_resume(_serialQueue);
+}
+
+- (void)cancel{
+    _isCanceled = YES;
 }
 
 - (void)dealloc{

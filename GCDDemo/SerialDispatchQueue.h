@@ -14,5 +14,6 @@
 - (void)pushQueue:(taskBlock)task;
 - (void)suspend;
 - (void)resume;
+- (void)cancel;
 
 @end

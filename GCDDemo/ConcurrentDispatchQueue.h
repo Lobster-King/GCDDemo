@@ -7,7 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "config.h"
 
 @interface ConcurrentDispatchQueue : NSObject
+
+- (void)pushQueue:(taskBlock)task;
+- (void)suspend;
+- (void)resume;
+- (void)cancel;
 
 @end
