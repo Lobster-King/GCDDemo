@@ -9,17 +9,31 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import "SerialDispatchQueue.h"
-
+#import "ConcurrentDispatchQueue.h"
 int main(int argc, char * argv[]) {
     @autoreleasepool {
         
         //1.SerialDispatchQueue
         
-        SerialDispatchQueue *serialQueue = [SerialDispatchQueue new];
+//        SerialDispatchQueue *serialQueue = [SerialDispatchQueue new];
+//        
+//        [serialQueue pushQueue:^{
+//            for (int i = 0; i<100000; i++) {
+//                printf("hello word %d",i);
+//            }
+//        }];
         
-        [serialQueue pushQueue:^{
+        //2.ConcurrentDispatchQueue
+        
+        ConcurrentDispatchQueue *concurrentQueue = [ConcurrentDispatchQueue new];
+        [concurrentQueue pushQueue:^{
             for (int i = 0; i<100000; i++) {
-                printf("hello word %d",i);
+                NSLog(@"asyn0 %d %@",i,[NSThread currentThread]);
+            }
+        }];
+        [concurrentQueue pushQueue:^{
+            for (int i = 0; i<100000; i++) {
+                NSLog(@"asyn1 %d %@",i,[NSThread currentThread]);
             }
         }];
         
